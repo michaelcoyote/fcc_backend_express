@@ -1,12 +1,15 @@
 let express = require('express');
 let app = express();
 
-// let bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
 
 app.use(function loggerMW(req, res, next) {
   console.log(`${req.method} ${req.path} - ${req.ip}`);
   next();
 });
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
@@ -14,8 +17,6 @@ app.get('/', (req, res) => {
 
 app.use('/public', express.static(__dirname + '/public'));
 
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
 
 app.get('/json', (req, res) => {
   let json_text = "Hello json"
@@ -38,18 +39,19 @@ app.get('/now', function(req, res, next) {
 //    res.json({ echo: echo_word })
 //  });
 
-// app.get('/name', (req, res) => {
-//    let myName = `${req.query.first} ${req.query.last}`;
-//    console.log(`name: ${myName}`)
-//    res.json({ name: myName });
+app.get('/name', (req, res) => {
+    let myName = `${req.query.first} ${req.query.last}`;
+    console.log(`name: ${myName}`)
+    res.json({ name: myName });
+});
+
   
-// app.post('/name', (req, res) => {
-//    let myName = `${req.body.first} ${req.body.last}`;
-//    console.log(req.body)
-//    console.log(`name: ${myName}`);
-//    res.json({name: myName});
-//      })
-//  });
+app.post('/name', (req, res) => {
+  let myName = `${req.body.first} ${req.body.last}`;
+    console.log(`name: ${myName}`);
+    res.json({name: myName});
+  }
+);
 
 console.log('Hello World');
 
